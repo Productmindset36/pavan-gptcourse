@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontier AI Mastery — Think Product</title>
+    <link rel="stylesheet" href="pm-design-system.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        html, body { height: 100%; margin: 0; overflow: hidden; }
+        body { display: flex; flex-direction: column; }
+        .course-page-header {
+            border-bottom: 1px solid var(--fg);
+            padding: 1.25rem 2.5rem 1.1rem;
+            flex-shrink: 0;
+        }
+        .course-page-header .hero-flag { margin-bottom: 0.3rem; font-size: 0.7rem; }
+        .course-page-header h1 {
+            font-family: 'T26 Carbon', 'Inter', sans-serif;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+        .course-page-header p {
+            color: var(--muted);
+            margin: 0.3rem 0 0;
+            max-width: 80ch;
+            font-size: 0.85rem;
+        }
+        .course-page-shell {
+            padding: 1rem 1.5rem 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+        }
+        .course-layout-page {
+            grid-template-columns: 1fr 360px;
+            min-height: 0;
+            height: 100%;
+            flex: 1;
+        }
+        .course-layout-page .course-main {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+        .course-layout-page .course-sidebar {
+            max-height: none;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .course-hero {
+            background: var(--fg);
+            color: var(--bg);
+            padding: 1.1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        .course-hero .mono { opacity: 0.6; font-size: 0.7rem; }
+        .course-hero h2 { color: var(--bg); margin: 0.2rem 0 0; font-family: 'T26 Carbon', 'Inter', sans-serif; font-size: 1.4rem; text-transform: uppercase; }
+        .course-hero-actions { display: flex; gap: 0.5rem; }
+        .course-hero-actions button {
+            background: transparent; color: var(--bg);
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 0.4rem 0.8rem; font-family: 'Departure Mono', monospace; font-size: 0.7rem;
+            text-transform: uppercase; cursor: pointer;
+        }
+        .course-hero-actions button:hover { background: var(--bg); color: var(--fg); }
+
+        .lesson-tabs {
+            display: flex; border-bottom: 1px solid var(--fg);
+            background: #fafafa;
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+        .tab-panels {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .tab-panels .tab-panel.active {
+            position: absolute;
+            inset: 0;
+            overflow-y: auto;
+            display: block;
+            scrollbar-width: none;
+        }
+        .tab-panels .tab-panel.active::-webkit-scrollbar { display: none; }
+        .lesson-tabs button {
+            background: transparent; border: none;
+            padding: 0.9rem 1.4rem;
+            font-family: 'Departure Mono', monospace; font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            cursor: pointer; color: var(--muted);
+            border-right: 1px solid var(--grid);
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+        .lesson-tabs button.active {
+            color: var(--fg); background: var(--bg);
+            border-bottom-color: var(--fg);
+        }
+        .lesson-tabs button:disabled { opacity: 0.25; cursor: not-allowed; }
+
+        .tab-panel { display: none; padding: 0; }
+        .tab-panel.active { display: block; }
+
+        .course-content { padding: 2.5rem; }
+        .course-content h3 {
+            font-family: 'T26 Carbon', 'Inter', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 0.04em;
+            margin: 2rem 0 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px dashed var(--grid);
+        }
+        .course-content p { line-height: 1.65; margin: 0 0 1rem; }
+        .course-content ul, .course-content ol { line-height: 1.65; padding-left: 1.2rem; }
+        .course-content li { margin-bottom: 0.4rem; }
+        .course-content em { color: var(--muted); }
+        .course-content code {
+            font-family: 'Departure Mono','JetBrains Mono', monospace;
+            font-size: 0.85em; background: #f4f4f4;
+            padding: 0.1rem 0.35rem; border: 1px solid var(--grid);
+        }
+        .course-content a, .course-content a:visited {
+            color: var(--fg);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+            text-decoration-color: var(--muted);
+        }
+        .course-content a:hover {
+            text-decoration-color: var(--fg);
+            background: #f4f4f4;
+        }
+        .course-content a code { color: inherit; }
+        .course-content a[target="_blank"]::after {
+            content: " ↗";
+            font-size: 0.75em;
+            opacity: 0.5;
+        }
+        .course-content table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.85rem; }
+        .course-content th, .course-content td { border: 1px solid var(--grid); padding: 0.6rem 0.8rem; text-align: left; vertical-align: top; }
+        .course-content th { background: #fafafa; font-family: 'Departure Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+        /* Models tab */
+        .models-grid { padding: 1.5rem 2rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0.9rem; }
+        .model-card {
+            border: 1px solid var(--grid); background: var(--bg);
+            padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;
+        }
+        .model-card:hover { border-color: var(--fg); }
+        .model-card .m-num {
+            font-family: 'Departure Mono', monospace; font-size: 0.65rem;
+            text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+        }
+        .model-card .m-title {
+            font-family: 'T26 Carbon', 'Inter', sans-serif; text-transform: uppercase;
+            font-size: 0.95rem; letter-spacing: -0.01em; line-height: 1.25;
+        }
+        .model-card .m-body { font-size: 0.85rem; line-height: 1.55; color: var(--fg); }
+
+        /* Watch tab */
+        .video-frame { aspect-ratio: 16 / 9; width: 100%; background: #000; }
+        .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+        .video-list { padding: 1.5rem 2.5rem; }
+        .video-item {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem; border: 1px solid var(--grid);
+            margin-bottom: 0.75rem; cursor: pointer; background: var(--bg);
+            transition: all 0.15s ease;
+        }
+        .video-item:hover { border-color: var(--fg); }
+        .video-item.active { background: var(--fg); color: var(--bg); }
+        .video-item .v-title { flex-grow: 1; font-weight: 600; }
+        .video-item .v-meta { font-family: 'Departure Mono', monospace; font-size: 0.7rem; opacity: 0.6; }
+        .empty-state {
+            padding: 4rem 2.5rem; text-align: center;
+            color: var(--muted); font-family: 'Departure Mono', monospace; font-size: 0.85rem;
+        }
+        .empty-state a {
+            display: inline-block; margin-top: 1rem;
+            padding: 0.6rem 1rem; border: 1px solid var(--fg); color: var(--fg);
+            text-decoration: none; text-transform: uppercase; font-size: 0.7rem;
+        }
+        .empty-state a:hover { background: var(--fg); color: var(--bg); }
+
+        /* Papers tab */
+        .papers-grid { padding: 1.5rem 2.5rem; }
+        .paper-item {
+            border: 1px solid var(--grid); padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem; cursor: pointer; background: var(--bg);
+            display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+        }
+        .paper-item:hover { border-color: var(--fg); }
+        .paper-item.active { background: var(--fg); color: var(--bg); }
+        .paper-item .p-title { font-weight: 600; }
+        .paper-item .p-meta { font-family: 'Departure Mono', monospace; font-size: 0.7rem; opacity: 0.6; margin-top: 0.2rem; }
+        .paper-item .p-actions { display: flex; gap: 0.4rem; }
+        .paper-item .p-actions a, .paper-item .p-actions button {
+            font-family: 'Departure Mono', monospace; font-size: 0.65rem;
+            text-transform: uppercase; padding: 0.35rem 0.6rem;
+            border: 1px solid currentColor; color: inherit; background: transparent;
+            text-decoration: none; cursor: pointer;
+        }
+        .paper-viewer { width: 100%; height: calc(100vh - 320px); min-height: 480px; border: 0; border-top: 1px solid var(--fg); display: block; }
+        .paper-viewer-empty { padding: 2rem 2.5rem; color: var(--muted); font-family: 'Departure Mono', monospace; font-size: 0.85rem; }
+
+        /* Lab tab */
+        .lab-content { padding: 2.5rem; }
+        .lab-content pre[class*="language-"] {
+            border: 1px solid var(--fg); background: #fafafa;
+            padding: 1.25rem; font-size: 0.85rem; margin: 1rem 0 1.5rem;
+            overflow-x: auto;
+        }
+        .lab-content code[class*="language-"] { font-family: 'Departure Mono','JetBrains Mono', monospace; }
+
+        /* Notes tab */
+        .notes-panel { padding: 2rem 2.5rem; }
+        .notes-panel textarea {
+            width: 100%; min-height: 360px; padding: 1.25rem;
+            border: 1px solid var(--fg); background: var(--bg);
+            font-family: 'Departure Mono','JetBrains Mono', monospace; font-size: 0.85rem;
+            line-height: 1.6; resize: vertical; box-sizing: border-box;
+        }
+        .notes-actions { display: flex; gap: 0.6rem; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
+        .notes-actions button {
+            font-family: 'Departure Mono', monospace; font-size: 0.7rem;
+            text-transform: uppercase; padding: 0.6rem 1rem;
+            border: 1px solid var(--fg); background: var(--bg); color: var(--fg); cursor: pointer;
+        }
+        .notes-actions button.primary { background: var(--fg); color: var(--bg); }
+        .notes-actions button:hover { background: var(--fg); color: var(--bg); }
+        .notes-actions button.primary:hover { background: var(--bg); color: var(--fg); }
+        .notes-status { font-family: 'Departure Mono', monospace; font-size: 0.7rem; color: var(--muted); }
+
+        /* Lesson nav */
+        .lesson-nav {
+            display: flex; justify-content: space-between; gap: 1rem;
+            padding: 1rem 2rem;
+            border-top: 1px solid var(--fg);
+            background: var(--bg);
+            flex-shrink: 0;
+        }
+        .lesson-nav button {
+            font-family: 'Departure Mono', monospace; font-size: 0.75rem;
+            text-transform: uppercase; background: transparent;
+            border: 1px solid var(--fg); padding: 0.7rem 1rem; cursor: pointer; color: var(--fg);
+        }
+        .lesson-nav button:hover { background: var(--fg); color: var(--bg); }
+        .lesson-nav button[disabled] { opacity: 0.3; cursor: not-allowed; }
+
+        .course-module.collapsed .course-lesson { display: none; }
+
+        @media (max-width: 900px) {
+            html, body { overflow: auto; height: auto; }
+            .course-page-shell { display: block; }
+            .course-layout-page { grid-template-columns: 1fr; height: auto; }
+            .course-layout-page .course-main { overflow: visible; }
+            .tab-panels { overflow: visible; }
+            .tab-panels .tab-panel.active { position: static; overflow: visible; }
+            .course-main { border-right: 0; border-bottom: 1px solid var(--fg); }
+        }
+    </style>
+</head>
+<body>
+    <header class="course-page-header">
+        <p class="hero-flag mono"><a href="index.html">THINK PRODUCT / LEARNING</a></p>
+        <h1>Frontier AI Mastery</h1>
+        <p>A self-directed advanced curriculum to build expert-grade understanding of modern LLM systems: transformer internals → pre-training → scaling → alignment → reasoning → agents → evals → deployment.</p>
+    </header>
+
+    <div class="course-page-shell">
+        <div class="course-layout course-layout-page">
+            <div class="course-main">
+                <div class="course-hero">
+                    <div>
+                        <div class="mono" id="hero-section">SECTION 00 / ORIENTATION</div>
+                        <h2 id="lesson-title">Vision</h2>
+                    </div>
+                    <div class="course-hero-actions">
+                        <button id="mark-done">Mark complete</button>
+                        <button id="pick-folder" title="Pick the notes/ folder once; notes save there as real .md files">Notes folder…</button>
+                    </div>
+                </div>
+
+                <div class="lesson-tabs" id="lesson-tabs">
+                    <button class="active" data-tab="read">Read</button>
+                    <button data-tab="models">Models</button>
+                    <button data-tab="watch">Watch</button>
+                    <button data-tab="papers">Papers</button>
+                    <button data-tab="lab">Lab</button>
+                    <button data-tab="notes">Notes</button>
+                </div>
+
+                <div class="tab-panels">
+                    <div id="tab-read" class="tab-panel active">
+                        <div class="course-content" id="read-body"></div>
+                    </div>
+                    <div id="tab-models" class="tab-panel">
+                        <div class="models-grid" id="models-list"></div>
+                    </div>
+                    <div id="tab-watch" class="tab-panel">
+                        <div class="video-frame" id="video-frame"></div>
+                        <div class="video-list" id="video-list"></div>
+                    </div>
+                    <div id="tab-papers" class="tab-panel">
+                        <div class="papers-grid" id="papers-list"></div>
+                        <div id="paper-viewer-slot"></div>
+                    </div>
+                    <div id="tab-lab" class="tab-panel">
+                        <div class="lab-content" id="lab-content"></div>
+                    </div>
+                    <div id="tab-notes" class="tab-panel">
+                        <div class="notes-panel">
+                            <textarea id="notes-textarea" placeholder="Your notes for this lesson. Saved to localStorage automatically; click 'Save .md' to write to disk."></textarea>
+                            <div class="notes-actions">
+                                <button class="primary" id="save-md">Save .md to repo</button>
+                                <button id="download-md">Download .md</button>
+                                <span class="notes-status" id="notes-status"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-nav" id="lesson-nav"></div>
+            </div>
+
+            <aside class="course-sidebar">
+                <div class="course-sidebar-header">
+                    <div class="label mono"><span id="progress-pct">0%</span> COMPLETE / <span id="progress-count">0 of 0</span></div>
+                    <h4 style="font-family: 'T26 Carbon', sans-serif; text-transform: uppercase; margin: 0.4rem 0 0;">CURRICULUM</h4>
+                </div>
+                <div id="curriculum-tree"></div>
+            </aside>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+
+    <script>
+    /* ============================================================
+       MENTAL MODELS / PRINCIPLES (keyed by module number)
+       The conceptual frames a senior practitioner would carry into the topic.
+       Show as cards in the "Models" tab. Both Theory and Lab lessons of a
+       module share the same models via the `module` field on each lesson.
+       ============================================================ */
+    const MODELS = {
+        1: [
+            { title: 'Attention is a soft dictionary lookup', body: 'A query indexes a set of keys, retrieves a weighted blend of values. Hard lookup (argmax) would be discrete; softmax makes it differentiable. Every other interpretation of attention reduces to this.' },
+            { title: 'Residual stream is the highway', body: 'Each token has a running vector that every layer reads from and writes into. Attention is the only mechanism that moves information between tokens; MLPs only process within a token. Most "circuits" you read about live in this stream.' },
+            { title: 'QK and OV are two separate circuits', body: 'The Q·K product decides *where* a head looks. The O·V product decides *what* information gets written into the destination. Mech-interp work treats them independently — and so should your mental model.' },
+            { title: 'Position is purely additive', body: 'Without positional embeddings (or RoPE), a transformer is permutation-invariant. Position is just another vector added to the residual stream; that\'s why RoPE — which rotates Q and K — works at all.' },
+            { title: 'Depth = composition, width = features', body: 'Deeper models compose more abstractions. Wider models hold more features per layer. Most modern frontier choices favour depth-heavy, narrower-feed-forward configs once you account for inference cost.' },
+            { title: 'FlashAttention changes what, not how', body: 'The math is identical. The win is tiling + recompute to keep the attention matrix in SRAM instead of HBM. This is why context-length costs scale the way they do — memory bandwidth is the bottleneck, not FLOPs.' },
+        ],
+        2: [
+            { title: 'Pre-training is lossless compression', body: 'Minimum description length lens: lower next-token loss = a better implicit world model. This is why log-loss correlates with downstream capability even when no benchmark is being trained on.' },
+            { title: 'Data quality > data quantity (above a floor)', body: 'Once you have ~1T tokens, every additional point of capability comes from filtering, deduplication, and curation. FineWeb, DCLM, and the Llama 3 data pipeline are the public evidence.' },
+            { title: 'Emergence is mostly a measurement artifact', body: 'Schaeffer et al. (2023): "emergent" jumps disappear under continuous metrics. Capability scales smoothly with compute; the cliffs are in how we score.' },
+            { title: 'The tokenizer is upstream of every bug', body: 'Math errors, multilingual gaps, code regressions — track most of them back to the tokenizer. Llama 3 doubled vocab from 32k → 128k for exactly this reason.' },
+            { title: 'The base model never disappears', body: 'RLHF and instruction-tuning shape the surface distribution; they do not delete the pre-trained capability beneath. Jailbreaks are usually just re-elicitation of the base model.' },
+        ],
+        3: [
+            { title: 'Compute = 6 · N · D', body: 'For dense transformers, training FLOPs ≈ 6 × parameters × tokens. Memorise this — it\'s the back-of-envelope for every "can we afford it?" question.' },
+            { title: 'Scaling laws are linear in log space', body: 'Loss vs compute, parameters, or data forms straight lines on log-log plots. Once you see the slope, you can extrapolate; that\'s the whole strategic value of these papers.' },
+            { title: 'Kaplan over-weighted parameters', body: 'Kaplan\'s recipe: scale params aggressively, scale data sublinearly. This was the consensus for two years and produced a generation of under-trained models. Chinchilla corrected it — but Kaplan still teaches the methodology.' },
+            { title: 'Loss is a proxy, not the goal', body: 'Scaling laws optimise pre-training loss. Downstream capability, alignment, and safety scale differently — and not always monotonically. Don\'t conflate the curve with the product.' },
+        ],
+        4: [
+            { title: '20 tokens per parameter', body: 'Chinchilla\'s compute-optimal heuristic: roughly 20 training tokens per model parameter. A 70B model "wants" 1.4T tokens at compute-optimum.' },
+            { title: 'Compute-optimal ≠ deployment-optimal', body: 'Sardana & Frankle: once you include inference, the optimum shifts toward smaller models trained on more tokens. Llama 3 8B on 15T tokens is the canonical example — wildly over-trained by Chinchilla, rational under inference economics.' },
+            { title: 'The "two years wrong" lesson', body: 'The whole field followed Kaplan for two years. Lesson: even at frontier labs, published consensus is rarely the local optimum. Always re-derive when stakes are high.' },
+            { title: 'Scaling laws are about budgets, not capability', body: 'They tell you how to spend a fixed compute budget. They do NOT tell you whether the resulting model will pass MMLU or hallucinate less. Don\'t use them for capability planning.' },
+        ],
+        5: [
+            { title: 'RLHF is preference shaping, not alignment', body: 'RLHF makes outputs match what labellers prefer. That overlaps with "aligned" but is not the same thing — and conflating them produces sycophancy, deception, and reward-hacking.' },
+            { title: 'DPO collapsed two stages into one loss', body: 'Classic RLHF: train a reward model, then PPO against it. DPO: derive the optimal policy directly from preferences via a closed-form loss. Same objective, way fewer moving parts. This is why DPO won in practice.' },
+            { title: 'KL divergence is the leash', body: 'Every RLHF/DPO method penalises drift from the SFT model. Without that leash, the policy collapses onto whatever exploits the reward. β controls how tight the leash is — and tuning it is most of the practical work.' },
+            { title: 'Constitutional AI = scalable supervision', body: 'Instead of human labellers, the model critiques itself against a written constitution. This scales human oversight from "labellers per example" to "principles per task" — the only way RLAIF reaches frontier quality.' },
+            { title: 'Reward hacking is the dominant failure mode', body: 'The model learns the reward function\'s shortcuts, not the intent. Length bias, sycophancy, refusal-shaped answers — all reward hacks. If your evals look great but users complain, suspect this first.' },
+        ],
+        6: [
+            { title: 'Test-time compute trades FLOPs for accuracy', body: 'CoT, self-consistency, ToT, and o-series all spend more inference compute to get better answers. The cost curve is real and measurable per-task.' },
+            { title: 'Self-consistency = majority vote over CoT samples', body: 'Sample N reasoning paths at temperature > 0; majority-vote the final answer. Tiny code change, often double-digit accuracy gains on math/logic. The simplest test-time-compute trick that works.' },
+            { title: 'R1 showed RL on outcomes elicits reasoning', body: 'No human CoT traces needed. Reward correct final answers, do RL on the policy, reasoning emerges. This is why "reasoning models" are not a new architecture — they\'re a post-training recipe.' },
+            { title: 'Reasoning is a different deployment surface', body: 'Latency goes from seconds to tens of seconds. Cost goes 10–100×. UX needs streaming + a "thinking" affordance. Don\'t default to a reasoning model — choose it task by task.' },
+            { title: 'Verifiability is the constraint', body: 'RL on reasoning works when answers can be checked (math, code). It struggles where rewards are vague (writing, judgement). This is why reasoning models lead on AIME/MATH and not on copy-editing.' },
+        ],
+        7: [
+            { title: 'Simple agents win in production', body: 'Anthropic\'s "Building effective agents": most production wins come from one model + a tight tool loop, not orchestrated multi-agent swarms. Complexity is almost always paying compounding context-fragmentation costs.' },
+            { title: 'ReAct loop: Reason → Act → Observe → repeat', body: 'The atomic agent pattern. Everything else (Reflexion, planner-executor-critic) is a wrapper around this loop with extra memory or critique steps.' },
+            { title: 'Tools are the moat, not the model', body: 'Agent quality ≈ tool quality × retry discipline. Bad tool schemas, silent failures, or noisy outputs degrade the best model. Spend disproportionate time on the tool layer.' },
+            { title: 'Push everything you can outside the LLM', body: 'Determinism, validation, retries, parsing — all cheaper, faster, and more reliable in code than in the model. Use the LLM only for what genuinely needs language understanding.' },
+            { title: 'Context engineering = the agent\'s working memory', body: 'What goes in the prompt at each step is the highest-leverage decision in the loop. Truncate history wrong and the agent forgets; include too much and it gets lost. (See Module 10.)' },
+            { title: 'Eval the trajectory, not the final answer', body: 'A correct final answer can hide three tool-call failures, a sycophantic detour, and a near-miss. Production agents need step-level evals — see Module 9.' },
+        ],
+        8: [
+            { title: 'Modern post-training is ~3 stages', body: 'SFT (instruction-following) → preference optimisation (DPO/PPO) → safety/red-teaming pass. Llama 3, DeepSeek-V3, Qwen2 all converge on this shape with minor variations.' },
+            { title: 'MoE = sparse activation at constant FLOPs', body: 'Mixture-of-Experts routes each token to k experts out of N. Total parameters explode; active parameters per token stay flat. Mixtral 8×7B has ~47B params, activates ~13B per token.' },
+            { title: 'Tokenizer choice locks in 1+ years of cost', body: 'You can\'t change a tokenizer without retraining. Llama 3 went 32k → 128k vocab to halve multilingual token counts — that\'s a deployment cost decision baked in at week one.' },
+            { title: 'Data ablations are the real paper', body: 'The architecture diff between frontier models is small. The data pipeline diff is enormous. Read these papers for data section first; architecture last.' },
+            { title: 'Synthetic data is now the dominant ingredient', body: 'Especially in post-training. The Llama 3 paper describes synthetic data generation pipelines for code, math, and instruction-following at industrial scale.' },
+        ],
+        9: [
+            { title: 'Public benchmarks are saturated or contaminated', body: 'MMLU, GSM8K, HumanEval — all leaking into training data. Most top-of-leaderboard scores are uninterpretable for product decisions. Build your own eval or trust nothing.' },
+            { title: 'Eval the product, not the model', body: 'Your users don\'t care about MMLU. They care whether the assistant handles their workflow. Evals must mirror the production distribution, end-to-end.' },
+            { title: 'LLM-as-judge has known bias floors', body: 'Position bias (prefers first answer), verbosity bias (prefers longer), self-preference bias (prefers same-family models). You can mitigate but never zero them. Always pair with rule-based or human spot-checks.' },
+            { title: '"Vibe checks" are a smell, not a signal', body: 'But they\'re the bottleneck. Codify what your team is "vibe-checking" into an actual rubric, and you\'ve built an eval. Most production eval suites start exactly here.' },
+            { title: 'Evals are the bottleneck, not the model', body: 'Hamel Husain\'s thesis: the team with the best evals ships best. Models are cheap; well-curated eval sets compound for years.' },
+        ],
+        10: [
+            { title: 'Lost-in-the-middle is real', body: 'Liu et al.: models attend strongly to the start and end of context, weakly to the middle. Put your most important content at the boundaries of long prompts.' },
+            { title: 'RAG ≠ search', body: 'Retrieval is one stage in a pipeline: query rewriting → hybrid search → reranking → context assembly → generation. Most "RAG is broken" complaints are actually broken retrieval or broken reranking.' },
+            { title: 'Contextual retrieval = chunk + LLM-generated context per chunk', body: 'Anthropic\'s recipe: before embedding, prepend each chunk with a short LLM-generated description of what the chunk is and where it fits. ~40–60% retrieval-failure reduction. Cheap, mechanical, big win.' },
+            { title: 'Long context vs RAG is a cost curve, not a binary', body: 'At small corpora and low query volumes, long context wins on simplicity. At scale, RAG wins on cost and latency. Cross-over depends on your token economics — model it explicitly.' },
+            { title: 'Structured output is half the battle', body: 'JSON schemas, tool-call validation, and constrained decoding eliminate most "agent broke" failures. If you\'re not using them yet, that\'s the cheapest reliability win on the table.' },
+            { title: 'Prompt engineering → context engineering', body: 'The term shifted because the work shifted: from one well-tuned string to managing the entire stack the model sees (system prompt + tools + retrieved docs + history + output schema). Not marketing.' },
+        ],
+    };
+
+    /* ============================================================
+       CURRICULUM DATA
+       Each lesson can declare:
+         videos:  [{ title, ytId, query }]   ytId optional; query is the YouTube search fallback
+         papers:  [{ title, authors, year, arxiv, query }]  arxiv ID optional
+         code:    [{ lang, body }]           lab snippets (Prism langs: python, bash)
+         body:    HTML for the Read tab
+       Only IDs verified against the source repos / canonical bibliographies are populated.
+       Anything blank renders a "Search …" button — paste the ID here later.
+       ============================================================ */
+    const CURRICULUM = [
+        { id: 's00', label: 'SECTION 00 / ORIENTATION', defaultOpen: true, lessons: [
+            { id: 'l00a', title: 'Vision', type: 'reading', duration: '5 min', body: `
+                <h3>Vision</h3>
+                <p>Develop the kind of integrated understanding of frontier AI that lets you:</p>
+                <ul>
+                    <li>Reason from first principles about LLM architecture and training choices</li>
+                    <li>Implement core components from scratch — not just call APIs</li>
+                    <li>Read frontier papers the week they drop and apply them in production</li>
+                    <li>Lead strategic AI conversations at McKinsey / BCG-grade rigor (TAM, ROI, technical risk, governance)</li>
+                    <li>Produce original public artifacts: podcast episodes, technical blog posts, demoable systems</li>
+                </ul>
+                <p>This is <strong>not</strong> a "learn to use ChatGPT" track. It's the technical-strategic stack that lets you ship enterprise AI products credibly and explain them to a Fortune 500 board.</p>
+            ` },
+            { id: 'l00b', title: 'Learning Principles', type: 'reading', duration: '4 min', body: `
+                <h3>Learning Principles</h3>
+                <ol>
+                    <li><strong>Implement before you discuss.</strong> Every module ends in code that runs.</li>
+                    <li><strong>Papers are primary sources.</strong> Blogs and videos are scaffolding — the paper is the truth.</li>
+                    <li><strong>One demo per module.</strong> Builds your portfolio and content pipeline simultaneously.</li>
+                    <li><strong>Public output forces clarity.</strong> Each module produces a 20–40 min podcast / discussion artifact.</li>
+                    <li><strong>Strategic frame on every topic.</strong> Always end with: <em>how would I brief an exec on this?</em></li>
+                </ol>
+            ` },
+            { id: 'l00c', title: 'Curriculum Overview', type: 'reading', duration: '6 min', body: `
+                <h3>Curriculum Overview</h3>
+                <table>
+                    <thead><tr><th>#</th><th>Module</th><th>Weeks</th><th>Hands-on Output</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>Transformer Architecture (Attention Is All You Need)</td><td>2</td><td>Mini-transformer from scratch</td></tr>
+                        <tr><td>2</td><td>GPT Pre-training</td><td>2</td><td>nanoGPT reproduction + writeup</td></tr>
+                        <tr><td>3</td><td>OpenAI Scaling Laws (Kaplan)</td><td>1</td><td>Compute-vs-loss notebook</td></tr>
+                        <tr><td>4</td><td>Chinchilla Scaling Laws</td><td>1</td><td>Re-analysis of Chinchilla curves</td></tr>
+                        <tr><td>5</td><td>RLHF & Alignment</td><td>2</td><td>DPO fine-tune on a small model</td></tr>
+                        <tr><td>6</td><td>Reasoning Models</td><td>2</td><td>CoT + self-consistency benchmark</td></tr>
+                        <tr><td>7</td><td>Agentic AI & Tool Use</td><td>2</td><td>Production-grade agent demo</td></tr>
+                        <tr><td>8</td><td>Pre / Post-training Recipes</td><td>2</td><td>Annotated Llama 3 / Mixtral teardown</td></tr>
+                        <tr><td>9</td><td>Evals</td><td>2</td><td>Custom eval harness for an enterprise task</td></tr>
+                        <tr><td>10</td><td>Context Engineering</td><td>2</td><td>RAG + long-context production system</td></tr>
+                    </tbody>
+                </table>
+                <p><strong>Total</strong>: ~18 focused weeks. Compresses to ~12 if you skip from-scratch implementation. Expands to ~26 if you go deep on each paper.</p>
+            ` },
+        ]},
+
+        { id: 's01', label: 'SECTION 01 / TRANSFORMER ARCHITECTURE', lessons: [
+            { id: 'l01a', title: 'Module 1 — Theory', type: 'video', duration: '~2 wks', module: 1,
+              videos: [
+                  { title: "Karpathy — Let's build GPT from scratch", ytId: 'kCc8FmEb1nY' },
+                  { title: '3Blue1Brown — But what is a GPT?', query: '3Blue1Brown But what is a GPT visual intro to transformers' },
+                  { title: 'Jay Alammar — The Illustrated Transformer (talk)', query: 'Jay Alammar Illustrated Transformer talk' },
+              ],
+              papers: [
+                  { title: 'Attention Is All You Need', authors: 'Vaswani et al.', year: 2017, arxiv: '1706.03762' },
+                  { title: 'BERT', authors: 'Devlin et al.', year: 2018, arxiv: '1810.04805' },
+                  { title: 'RoFormer: Rotary Position Embeddings', authors: 'Su et al.', year: 2021, arxiv: '2104.09864' },
+                  { title: 'FlashAttention', authors: 'Dao et al.', year: 2022, arxiv: '2205.14135' },
+                  { title: 'GPT-1 (Improving Language Understanding by Generative Pre-Training)', authors: 'Radford et al.', year: 2018, query: 'GPT-1 Radford 2018 Improving Language Understanding Generative Pre-Training pdf' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>The transformer is the substrate. Without it as a <em>mental model</em> (not a black box), every later topic stays surface-level.</p>
+                <h3>Foundational papers</h3>
+                <ul>
+                    <li>Vaswani et al. (2017) — <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener"><em>Attention Is All You Need</em></a></li>
+                    <li>Devlin et al. (2018) — <a href="https://arxiv.org/abs/1810.04805" target="_blank" rel="noopener"><em>BERT</em></a> (encoder-only contrast)</li>
+                    <li>Radford et al. (2018) — <a href="https://www.google.com/search?q=Radford+2018+Improving+Language+Understanding+by+Generative+Pre-Training+pdf" target="_blank" rel="noopener"><em>Improving Language Understanding by Generative Pre-Training</em></a> (GPT-1, decoder-only contrast)</li>
+                    <li>Su et al. (2021) — <a href="https://arxiv.org/abs/2104.09864" target="_blank" rel="noopener"><em>RoFormer: Rotary Position Embeddings</em></a> (used in Llama)</li>
+                    <li>Dao et al. (2022) — <a href="https://arxiv.org/abs/2205.14135" target="_blank" rel="noopener"><em>FlashAttention</em></a> (how it actually runs fast)</li>
+                </ul>
+                <h3>Courses</h3>
+                <ul>
+                    <li>Stanford <a href="https://web.stanford.edu/class/cs224n/" target="_blank" rel="noopener"><strong>CS224N</strong></a> (Manning) — Lectures 8–9 are the transformer deep dive</li>
+                    <li>Stanford <a href="https://web.stanford.edu/class/cs25/" target="_blank" rel="noopener"><strong>CS25</strong></a> — Transformers United seminar series</li>
+                    <li>Hugging Face <a href="https://huggingface.co/learn/nlp-course" target="_blank" rel="noopener"><strong>NLP Course</strong></a> — Chapters 1–4 for applied grounding</li>
+                </ul>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>Why did attention beat RNNs — is it just compute, or something more fundamental?</li>
+                    <li>When does encoder-decoder beat decoder-only? Why has the field consolidated on decoder-only?</li>
+                    <li>What changed between vanilla attention and FlashAttention — and why does it matter for serving cost?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>How would you brief a CTO on the cost implications of context length? What architectural choices drive serving cost at scale?</p>
+              `
+            },
+            { id: 'l01b', title: 'Module 1 — Lab', type: 'lab', duration: 'Hands-on', module: 1,
+              code: [
+                { lang: 'python', body:
+`import torch, torch.nn as nn, math
+
+def scaled_dot_product_attention(q, k, v, mask=None):
+    # q, k, v: (batch, heads, seq, d_head)
+    d_k = q.size(-1)
+    scores = (q @ k.transpose(-2, -1)) / math.sqrt(d_k)
+    if mask is not None:
+        scores = scores.masked_fill(mask == 0, float('-inf'))
+    attn = torch.softmax(scores, dim=-1)
+    return attn @ v, attn
+
+class MultiHeadAttention(nn.Module):
+    def __init__(self, d_model, n_heads):
+        super().__init__()
+        assert d_model % n_heads == 0
+        self.n_heads, self.d_head = n_heads, d_model // n_heads
+        self.qkv = nn.Linear(d_model, 3 * d_model, bias=False)
+        self.proj = nn.Linear(d_model, d_model)
+
+    def forward(self, x, mask=None):
+        B, T, D = x.shape
+        qkv = self.qkv(x).reshape(B, T, 3, self.n_heads, self.d_head)
+        q, k, v = qkv.permute(2, 0, 3, 1, 4)  # (3, B, H, T, d_head)
+        out, _ = scaled_dot_product_attention(q, k, v, mask)
+        return self.proj(out.transpose(1, 2).reshape(B, T, D))
+` }
+              ],
+              body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Implement scaled dot-product attention from scratch in PyTorch (~50 lines)</li>
+                    <li>Build single-head → multi-head attention block</li>
+                    <li>Stack into full encoder block, then decoder block</li>
+                    <li>Train on TinyShakespeare or TinyStories — generate samples</li>
+                    <li><strong>Stretch</strong>: implement KV caching for inference; profile attention vs FlashAttention</li>
+                </ol>
+                <p>Reference repos: <a href="https://github.com/karpathy/nanoGPT" target="_blank" rel="noopener"><code>karpathy/nanoGPT</code></a>, <a href="https://github.com/karpathy/minGPT" target="_blank" rel="noopener"><code>karpathy/minGPT</code></a></p>
+                <p>Starter code is in the <strong>Lab</strong> tab.</p>
+              `
+            },
+        ]},
+
+        { id: 's02', label: 'SECTION 02 / GPT PRE-TRAINING', lessons: [
+            { id: 'l02a', title: 'Module 2 — Theory', type: 'video', duration: '~2 wks', module: 2,
+              videos: [
+                  { title: "Karpathy — Let's reproduce GPT-2 (124M)", ytId: 'l8pRSuU81PU' },
+                  { title: 'Karpathy — Intro to Large Language Models', query: 'Karpathy Intro to Large Language Models 1 hour talk' },
+              ],
+              papers: [
+                  { title: 'GPT-3: Language Models are Few-Shot Learners', authors: 'Brown et al.', year: 2020, arxiv: '2005.14165' },
+                  { title: 'LLaMA', authors: 'Touvron et al.', year: 2023, arxiv: '2302.13971' },
+                  { title: 'LLaMA 2', authors: 'Touvron et al.', year: 2023, arxiv: '2307.09288' },
+                  { title: 'The Llama 3 Herd of Models', authors: 'Dubey et al.', year: 2024, arxiv: '2407.21783' },
+                  { title: 'GPT-2 (Language Models are Unsupervised Multitask Learners)', authors: 'Radford et al.', year: 2019, query: 'GPT-2 Radford 2019 Language Models Unsupervised Multitask Learners pdf' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>Pre-training is where capability comes from. Fine-tuning and RLHF shape it; pre-training creates it.</p>
+                <h3>Courses</h3>
+                <ul>
+                    <li>Stanford <a href="https://stanford-cs336.github.io/" target="_blank" rel="noopener"><strong>CS336</strong></a> (Tatsunori Hashimoto) — <em>Language Modeling from Scratch</em>.</li>
+                    <li>Hugging Face <a href="https://huggingface.co/learn/llm-course" target="_blank" rel="noopener"><strong>LLM Course</strong></a></li>
+                </ul>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>What does pre-training data quality actually mean — and why is it the moat now?</li>
+                    <li>When does scaling parameters stop helping vs scaling data?</li>
+                    <li>What would you do differently if you were training GPT-2 today vs 2019?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>For an enterprise, when does fine-tuning beat prompting, and when does pre-training (continued pre-training on domain data) beat fine-tuning?</p>
+              `
+            },
+            { id: 'l02b', title: 'Module 2 — Lab', type: 'lab', duration: 'Hands-on', module: 2,
+              code: [
+                { lang: 'bash', body:
+`# Clone and run Karpathy's reference
+git clone https://github.com/karpathy/build-nanogpt
+cd build-nanogpt
+pip install torch numpy tiktoken transformers datasets
+python train_gpt2.py  # single-GPU; multi-GPU via torchrun
+` },
+                { lang: 'python', body:
+`# Mixed precision + gradient accumulation skeleton
+scaler = torch.cuda.amp.GradScaler()
+accum_steps = 8
+
+for step, batch in enumerate(loader):
+    with torch.cuda.amp.autocast(dtype=torch.bfloat16):
+        loss = model(batch).loss / accum_steps
+    scaler.scale(loss).backward()
+    if (step + 1) % accum_steps == 0:
+        scaler.unscale_(optimizer)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        scaler.step(optimizer); scaler.update()
+        optimizer.zero_grad(set_to_none=True)
+        scheduler.step()
+` }
+              ],
+              body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Tokenize <a href="https://huggingface.co/datasets/Skylion007/openwebtext" target="_blank" rel="noopener">OpenWebText</a> or a slice of <a href="https://huggingface.co/datasets/HuggingFaceFW/fineweb" target="_blank" rel="noopener">FineWeb</a> with BPE / <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">tiktoken</a></li>
+                    <li>Train a 124M-param GPT-2 reproduction on a single 8×A100 node (or rent on <a href="https://lambdalabs.com" target="_blank" rel="noopener">Lambda</a> / <a href="https://www.runpod.io" target="_blank" rel="noopener">RunPod</a>)</li>
+                    <li>Implement: gradient accumulation, mixed precision, learning rate warmup + cosine decay, gradient clipping</li>
+                    <li>Track loss curves; compare to Karpathy's published numbers</li>
+                    <li><strong>Stretch</strong>: try a different optimizer (Lion, Sophia) and compare convergence</li>
+                </ol>
+                <p>Reference repo: <a href="https://github.com/karpathy/build-nanogpt" target="_blank" rel="noopener"><code>karpathy/build-nanogpt</code></a></p>
+              `
+            },
+        ]},
+
+        { id: 's03', label: 'SECTION 03 / KAPLAN SCALING LAWS', lessons: [
+            { id: 'l03a', title: 'Module 3 — Theory', type: 'video', duration: '~1 wk', module: 3,
+              papers: [
+                  { title: 'Scaling Laws for Neural Language Models', authors: 'Kaplan et al.', year: 2020, arxiv: '2001.08361' },
+                  { title: 'Scaling Laws for Autoregressive Generative Modeling', authors: 'Henighan et al.', year: 2020, arxiv: '2010.14701' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>Scaling laws turned LLM training from craft into capital allocation. They're how labs decide what to build.</p>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>Why did the Kaplan paper conclude "scale model size aggressively, data scales sublinearly" — and why was that wrong?</li>
+                    <li>What does a scaling-law-driven strategy look like inside a frontier lab?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>How would you size compute and data budgets for a new model program at a $50M / $500M / $5B level?</p>
+              `
+            },
+            { id: 'l03b', title: 'Module 3 — Lab', type: 'lab', duration: 'Hands-on', module: 3, body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Train a series of small models (1M, 3M, 10M, 30M params) on the same dataset</li>
+                    <li>Plot loss vs compute (FLOPs) on log-log axes</li>
+                    <li>Fit the Kaplan power law; estimate exponents</li>
+                    <li>Compare your exponents to Kaplan's</li>
+                </ol>
+              `
+            },
+        ]},
+
+        { id: 's04', label: 'SECTION 04 / CHINCHILLA SCALING LAWS', lessons: [
+            { id: 'l04a', title: 'Module 4 — Theory', type: 'video', duration: '~1 wk', module: 4,
+              papers: [
+                  { title: 'Training Compute-Optimal LLMs (Chinchilla)', authors: 'Hoffmann et al.', year: 2022, arxiv: '2203.15556' },
+                  { title: 'Chinchilla Scaling: A replication attempt', authors: 'Besiroglu et al.', year: 2024, arxiv: '2404.10102' },
+                  { title: 'Beyond Chinchilla-Optimal: Accounting for Inference', authors: 'Sardana & Frankle', year: 2023, arxiv: '2401.00448' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>Chinchilla overturned Kaplan and reshaped how every lab allocates compute. This is the most important scaling result of the modern era.</p>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>Kaplan vs Chinchilla — what did they miss, and why did the field believe the wrong answer for two years?</li>
+                    <li>Sardana & Frankle argue Chinchilla is wrong once inference cost is included — do you agree?</li>
+                    <li>What's the next scaling law going to look like?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>You're advising a client deciding between (a) training a 70B model on 1T tokens, (b) a 7B on 10T tokens, (c) just using GPT-4 via API. Walk through the economics.</p>
+              `
+            },
+            { id: 'l04b', title: 'Module 4 — Lab', type: 'lab', duration: 'Hands-on', module: 4, body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Reproduce Chinchilla's parametric fit using their published data points</li>
+                    <li>Solve for compute-optimal (N, D) given a budget — show your work</li>
+                    <li>Project: under Chinchilla, what would a 70B model "want" for tokens? Compare to Llama 2 70B's actual training tokens.</li>
+                </ol>
+              `
+            },
+        ]},
+
+        { id: 's05', label: 'SECTION 05 / RLHF & ALIGNMENT', lessons: [
+            { id: 'l05a', title: 'Module 5 — Theory', type: 'video', duration: '~2 wks', module: 5,
+              videos: [
+                  { title: 'Karpathy — State of GPT (Microsoft Build)', query: 'Karpathy State of GPT Microsoft Build talk' },
+                  { title: 'Nathan Lambert — RLHF talks', query: 'Nathan Lambert RLHF talk YouTube' },
+              ],
+              papers: [
+                  { title: 'Deep RL from Human Preferences', authors: 'Christiano et al.', year: 2017, arxiv: '1706.03741' },
+                  { title: 'InstructGPT', authors: 'Ouyang et al.', year: 2022, arxiv: '2203.02155' },
+                  { title: 'Training a Helpful and Harmless Assistant (Anthropic)', authors: 'Bai et al.', year: 2022, arxiv: '2204.05862' },
+                  { title: 'Direct Preference Optimization (DPO)', authors: 'Rafailov et al.', year: 2023, arxiv: '2305.18290' },
+                  { title: 'Constitutional AI', authors: 'Bai et al.', year: 2022, arxiv: '2212.08073' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>RLHF is what turns a raw pre-trained model into something usable. Every shipped chatbot since 2022 sits downstream of these techniques.</p>
+                <h3>Courses / resources</h3>
+                <ul>
+                    <li>Hugging Face <a href="https://huggingface.co/docs/trl" target="_blank" rel="noopener"><strong>TRL library</strong></a> docs + <a href="https://github.com/huggingface/trl" target="_blank" rel="noopener">tutorials</a></li>
+                    <li>Nathan Lambert's <a href="https://www.interconnects.ai" target="_blank" rel="noopener"><strong>Interconnects</strong></a> blog and <a href="https://rlhfbook.com" target="_blank" rel="noopener"><em>RLHF Book</em></a> draft</li>
+                </ul>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>Why did DPO replace PPO in most practical pipelines?</li>
+                    <li>What's the difference between RLHF, RLAIF, and Constitutional AI in practice?</li>
+                    <li>Is RLHF really alignment, or just preference-shaped fine-tuning?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>For an enterprise building an internal assistant, what's the minimum viable post-training stack? When do they need RLHF vs just SFT?</p>
+              `
+            },
+            { id: 'l05b', title: 'Module 5 — Lab', type: 'lab', duration: 'Hands-on', module: 5,
+              code: [
+                { lang: 'python', body:
+`# Minimal DPO with TRL
+from trl import DPOTrainer, DPOConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from datasets import load_dataset
+
+model_id = "EleutherAI/pythia-1.4b"
+model = AutoModelForCausalLM.from_pretrained(model_id)
+ref   = AutoModelForCausalLM.from_pretrained(model_id)
+tok   = AutoTokenizer.from_pretrained(model_id)
+
+ds = load_dataset("HuggingFaceH4/ultrafeedback_binarized", split="train_prefs[:2000]")
+
+cfg = DPOConfig(
+    output_dir="dpo-pythia-1.4b",
+    per_device_train_batch_size=2,
+    gradient_accumulation_steps=8,
+    learning_rate=5e-7,
+    num_train_epochs=1,
+    beta=0.1,
+)
+
+DPOTrainer(model=model, ref_model=ref, args=cfg, tokenizer=tok, train_dataset=ds).train()
+` }
+              ],
+              body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Take an open base model (<a href="https://huggingface.co/EleutherAI/pythia-1.4b" target="_blank" rel="noopener">Pythia-1.4B</a>, <a href="https://huggingface.co/meta-llama/Llama-3.2-1B" target="_blank" rel="noopener">Llama-3.2-1B</a>)</li>
+                    <li>Build a small preference dataset (or use <a href="https://huggingface.co/datasets/openbmb/UltraFeedback" target="_blank" rel="noopener">UltraFeedback</a> / <a href="https://huggingface.co/datasets/Anthropic/hh-rlhf" target="_blank" rel="noopener">HH-RLHF</a>)</li>
+                    <li>Run <strong>DPO</strong> fine-tuning with <a href="https://github.com/huggingface/trl" target="_blank" rel="noopener">TRL</a> (simpler than full PPO, runs on one GPU)</li>
+                    <li>Compare base vs DPO outputs on held-out prompts</li>
+                    <li><strong>Stretch</strong>: implement PPO from scratch on a toy task</li>
+                </ol>
+              `
+            },
+        ]},
+
+        { id: 's06', label: 'SECTION 06 / REASONING MODELS', lessons: [
+            { id: 'l06a', title: 'Module 6 — Theory', type: 'video', duration: '~2 wks', module: 6,
+              papers: [
+                  { title: 'Chain-of-Thought Prompting Elicits Reasoning', authors: 'Wei et al.', year: 2022, arxiv: '2201.11903' },
+                  { title: 'Self-Consistency Improves CoT', authors: 'Wang et al.', year: 2022, arxiv: '2203.11171' },
+                  { title: 'Tree of Thoughts', authors: 'Yao et al.', year: 2023, arxiv: '2305.10601' },
+                  { title: 'DeepSeek-R1', authors: 'DeepSeek-AI', year: 2025, arxiv: '2501.12948' },
+                  { title: 'OpenAI o1 — Learning to Reason with LLMs', authors: 'OpenAI', year: 2024, query: 'OpenAI o1 Learning to Reason with LLMs system card' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>The o-series / R1 shift is the biggest capability jump since GPT-4. Reasoning models are how labs are pushing past pre-training limits.</p>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>Is "reasoning" a real new capability or scaled-up CoT?</li>
+                    <li>What did DeepSeek-R1 reveal about what was inside o1?</li>
+                    <li>Where does test-time compute beat training-time compute economically?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>For which enterprise tasks is paying 10–100× more per token for a reasoning model worth it? Build the decision framework.</p>
+              `
+            },
+            { id: 'l06b', title: 'Module 6 — Lab', type: 'lab', duration: 'Hands-on', module: 6,
+              code: [
+                { lang: 'python', body:
+`# Self-consistency: sample N CoT traces, majority-vote the final answer
+from collections import Counter
+
+def self_consistent_answer(client, prompt, n=20, temperature=0.7):
+    answers = []
+    for _ in range(n):
+        msg = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=512, temperature=temperature,
+            messages=[{"role":"user","content":prompt + "\\nThink step by step. Final answer on the last line."}],
+        )
+        last_line = msg.content[0].text.strip().splitlines()[-1]
+        answers.append(last_line.strip())
+    return Counter(answers).most_common(1)[0][0]
+` }
+              ],
+              body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Build a CoT + self-consistency harness on <a href="https://huggingface.co/datasets/openai/gsm8k" target="_blank" rel="noopener">GSM8K</a> or <a href="https://huggingface.co/datasets/hendrycks/competition_math" target="_blank" rel="noopener">MATH</a></li>
+                    <li>Compare: zero-shot vs CoT vs CoT + self-consistency vs reasoning model</li>
+                    <li>Profile inference cost per correct answer</li>
+                    <li><strong>Stretch</strong>: implement a simple Tree-of-Thoughts search loop</li>
+                    <li><strong>Stretch</strong>: fine-tune a small model on R1's reasoning traces (distillation)</li>
+                </ol>
+              `
+            },
+        ]},
+
+        { id: 's07', label: 'SECTION 07 / AGENTIC AI & TOOL USE', lessons: [
+            { id: 'l07a', title: 'Module 7 — Theory', type: 'video', duration: '~2 wks', module: 7,
+              papers: [
+                  { title: 'ReAct', authors: 'Yao et al.', year: 2022, arxiv: '2210.03629' },
+                  { title: 'Toolformer', authors: 'Schick et al.', year: 2023, arxiv: '2302.04761' },
+                  { title: 'Reflexion', authors: 'Shinn et al.', year: 2023, arxiv: '2303.11366' },
+                  { title: 'SWE-agent', authors: 'Yang et al.', year: 2024, arxiv: '2405.15793' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>This is the production frontier. Tool-using agents are what turns LLMs from chat into automation.</p>
+                <h3>Industry resources (external — open in new tab)</h3>
+                <ul>
+                    <li>Anthropic — <a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener"><em>Building effective agents</em></a></li>
+                    <li>Anthropic — <a href="https://www.anthropic.com/engineering/built-multi-agent-research-system" target="_blank" rel="noopener"><em>How we built our multi-agent research system</em></a></li>
+                    <li>LangChain — <a href="https://www.google.com/search?q=LangChain+State+of+AI+Agents+report" target="_blank" rel="noopener"><em>State of AI Agents</em></a> report</li>
+                    <li>OpenAI — <a href="https://www.google.com/search?q=OpenAI+practical+guide+to+building+agents+pdf" target="_blank" rel="noopener"><em>A practical guide to building agents</em></a></li>
+                </ul>
+                <h3>Courses</h3>
+                <ul>
+                    <li><a href="https://www.deeplearning.ai/short-courses/" target="_blank" rel="noopener">DeepLearning.AI</a> — <em>AI Agents in LangGraph</em>, <em>Building Agentic RAG with LlamaIndex</em></li>
+                    <li>Hugging Face — <a href="https://huggingface.co/learn/agents-course" target="_blank" rel="noopener"><em>Agents Course</em></a></li>
+                </ul>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>Why do simple agents in production usually beat complex multi-agent systems?</li>
+                    <li>When is RAG enough vs when do you need agentic retrieval?</li>
+                    <li>What's the right abstraction layer — raw API, LangGraph, or something else?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>For a Fortune 500 considering agent deployment, what's the realistic ROI model? What governance / monitoring do they need?</p>
+              `
+            },
+            { id: 'l07b', title: 'Module 7 — Lab', type: 'lab', duration: 'Hands-on', module: 7,
+              code: [
+                { lang: 'python', body:
+`# Minimal ReAct loop — no framework
+import anthropic, json
+
+client = anthropic.Anthropic()
+TOOLS = [{
+    "name": "calculator",
+    "description": "Evaluate a math expression. Input: {\\"expr\\": \\"<python expression>\\"}",
+    "input_schema": {"type":"object","properties":{"expr":{"type":"string"}},"required":["expr"]}
+}]
+
+def run(task):
+    messages = [{"role":"user","content":task}]
+    while True:
+        r = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=1024, tools=TOOLS, messages=messages,
+        )
+        if r.stop_reason == "end_turn":
+            return r.content[-1].text
+        tool_use = next(b for b in r.content if b.type == "tool_use")
+        result = str(eval(tool_use.input["expr"]))   # toy — never eval untrusted in prod
+        messages += [
+            {"role":"assistant","content":r.content},
+            {"role":"user","content":[{"type":"tool_result","tool_use_id":tool_use.id,"content":result}]},
+        ]
+` }
+              ],
+              body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Build a single-tool ReAct agent (calculator + web search) from scratch — no framework</li>
+                    <li>Build the same agent using <a href="https://github.com/langchain-ai/langgraph" target="_blank" rel="noopener">LangGraph</a></li>
+                    <li>Add: retries, error handling, tool-call validation, observability (<a href="https://smith.langchain.com" target="_blank" rel="noopener">LangSmith</a> / <a href="https://langfuse.com" target="_blank" rel="noopener">Langfuse</a>)</li>
+                    <li>Build a <strong>multi-agent</strong> system: planner + executor + critic</li>
+                    <li><strong>Stretch</strong>: integrate <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP (Model Context Protocol)</a> servers</li>
+                    <li><strong>Stretch</strong>: build a <a href="https://github.com/princeton-nlp/SWE-agent" target="_blank" rel="noopener">SWE-agent</a>-style code agent against a small GitHub repo</li>
+                </ol>
+              `
+            },
+        ]},
+
+        { id: 's08', label: 'SECTION 08 / PRE/POST-TRAINING RECIPES', lessons: [
+            { id: 'l08a', title: 'Module 8 — Theory', type: 'video', duration: '~2 wks', module: 8,
+              papers: [
+                  { title: 'The Llama 3 Herd of Models', authors: 'Dubey et al.', year: 2024, arxiv: '2407.21783' },
+                  { title: 'Mixtral of Experts', authors: 'Jiang et al.', year: 2024, arxiv: '2401.04088' },
+                  { title: 'DeepSeek-V3 Technical Report', authors: 'DeepSeek-AI', year: 2024, arxiv: '2412.19437' },
+                  { title: 'Qwen2 Technical Report', authors: 'Qwen Team', year: 2024, arxiv: '2407.10671' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>The recipes published in 2024–2026 — Llama 3, Mixtral, DeepSeek-V3 — are the production-grade playbooks. Reading them carefully is the difference between hand-wave and operator-grade understanding.</p>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>What does the Llama 3 paper tell us about where the field is heading?</li>
+                    <li>MoE vs dense — when does each win?</li>
+                    <li>What's the modern post-training stack converging on?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>If you were advising a sovereign / national AI program on training their own foundation model, walk through the decision tree.</p>
+              `
+            },
+            { id: 'l08b', title: 'Module 8 — Lab', type: 'lab', duration: 'Hands-on', module: 8, body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Read Llama 3 paper end-to-end. Annotate every design decision.</li>
+                    <li>Build a one-page diagram of the full pre-training → SFT → DPO → safety pipeline</li>
+                    <li>Pick three decisions you disagree with — argue them in writing</li>
+                    <li>Compare Llama 3, DeepSeek-V3, Mixtral on: tokenizer, architecture, data, post-training. Build a comparison matrix.</li>
+                </ol>
+              `
+            },
+        ]},
+
+        { id: 's09', label: 'SECTION 09 / EVALS', lessons: [
+            { id: 'l09a', title: 'Module 9 — Theory', type: 'video', duration: '~2 wks', module: 9,
+              papers: [
+                  { title: 'HELM', authors: 'Liang et al.', year: 2022, arxiv: '2211.09110' },
+                  { title: 'MMLU', authors: 'Hendrycks et al.', year: 2021, arxiv: '2009.03300' },
+                  { title: 'BIG-bench', authors: 'Srivastava et al.', year: 2022, arxiv: '2206.04615' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>Evals are the bottleneck of every serious AI product. The team that evals best, ships best.</p>
+                <h3>Tools</h3>
+                <ul>
+                    <li><a href="https://inspect.ai-safety-institute.org.uk/" target="_blank" rel="noopener"><strong>Inspect</strong></a> (AISI) — the cleanest modern eval framework</li>
+                    <li><a href="https://github.com/EleutherAI/lm-evaluation-harness" target="_blank" rel="noopener"><strong>lm-evaluation-harness</strong></a> (EleutherAI)</li>
+                    <li><a href="https://github.com/openai/evals" target="_blank" rel="noopener"><strong>OpenAI Evals</strong></a></li>
+                    <li><a href="https://braintrust.dev" target="_blank" rel="noopener"><strong>Braintrust</strong></a>, <a href="https://langfuse.com" target="_blank" rel="noopener"><strong>Langfuse</strong></a>, <a href="https://smith.langchain.com" target="_blank" rel="noopener"><strong>LangSmith</strong></a> for production eval pipelines</li>
+                </ul>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>Why are public benchmarks mostly useless for product decisions?</li>
+                    <li>What does LLM-as-judge get right, and where does it fail?</li>
+                    <li>How do you eval an agent (multi-step, tool-using) vs a single-turn model?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>For an enterprise AI deployment, what's the eval rigor that gets you past procurement / compliance / risk?</p>
+              `
+            },
+            { id: 'l09b', title: 'Module 9 — Lab', type: 'lab', duration: 'Hands-on', module: 9, body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Take a real task from your work (e.g., AI opportunity discovery)</li>
+                    <li>Build a custom eval set: 50 prompts with gold-standard outputs</li>
+                    <li>Define rubrics: rule-based + LLM-as-judge</li>
+                    <li>Run eval across 3+ models (GPT-4o, Claude, Llama 3 70B)</li>
+                    <li>Build a dashboard tracking eval scores over time</li>
+                    <li><strong>Stretch</strong>: build a synthetic data generator for eval expansion</li>
+                </ol>
+              `
+            },
+        ]},
+
+        { id: 's10', label: 'SECTION 10 / CONTEXT ENGINEERING', lessons: [
+            { id: 'l10a', title: 'Module 10 — Theory', type: 'video', duration: '~2 wks', module: 10,
+              papers: [
+                  { title: 'Lost in the Middle', authors: 'Liu et al.', year: 2023, arxiv: '2307.03172' },
+                  { title: 'Retrieval-Augmented Generation (RAG)', authors: 'Lewis et al.', year: 2020, arxiv: '2005.11401' },
+                  { title: 'The Prompt Report', authors: 'Schulhoff et al.', year: 2024, arxiv: '2406.06608' },
+              ],
+              body: `
+                <h3>Why it matters</h3>
+                <p>"Prompt engineering" has matured into context engineering: managing the full information stack the model sees — system prompt, tools, retrieved docs, conversation history, output format.</p>
+                <h3>Industry resources (external)</h3>
+                <ul>
+                    <li>Anthropic — <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener"><em>Prompt engineering</em></a> docs</li>
+                    <li>Anthropic — <a href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener"><em>Contextual Retrieval</em></a></li>
+                </ul>
+                <h3>Podcast / discussion prompts</h3>
+                <ul>
+                    <li>Is long context killing RAG, or is RAG just maturing?</li>
+                    <li>What's the difference between prompt engineering and context engineering — is the new term real or marketing?</li>
+                    <li>How do you debug a context engineering problem in production?</li>
+                </ul>
+                <h3>Strategic frame</h3>
+                <p>For an enterprise with 10M docs and strict compliance, what's the right architecture — long context, RAG, or hybrid? Cost it.</p>
+              `
+            },
+            { id: 'l10b', title: 'Module 10 — Lab', type: 'lab', duration: 'Hands-on', module: 10, body: `
+                <h3>Hands-on</h3>
+                <ol>
+                    <li>Build a baseline RAG system over a real corpus (your docs, papers, knowledge base)</li>
+                    <li>Layer in: query rewriting, hybrid search (BM25 + dense), reranking</li>
+                    <li>Implement <strong>contextual retrieval</strong> (Anthropic's recipe)</li>
+                    <li>Add long-context fallback (200K+ context, no retrieval) — compare quality and cost</li>
+                    <li>Build a structured-output layer (JSON schemas, tool-call validation)</li>
+                    <li><strong>Stretch</strong>: agentic retrieval (let the model issue its own search queries)</li>
+                </ol>
+              `
+            },
+        ]},
+
+        { id: 's11', label: 'SECTION 11 / PRODUCTION', lessons: [
+            { id: 'l11a', title: 'Infrastructure & Tooling', type: 'reading', duration: '6 min', body: `
+                <h3>Compute</h3>
+                <ul>
+                    <li><strong>Local</strong>: M-series Mac or RTX 4090 for inference, small experiments</li>
+                    <li><strong>Rentable</strong>: <a href="https://lambdalabs.com" target="_blank" rel="noopener">Lambda Labs</a>, <a href="https://www.runpod.io" target="_blank" rel="noopener">RunPod</a>, <a href="https://modal.com" target="_blank" rel="noopener">Modal</a>, <a href="https://vast.ai" target="_blank" rel="noopener">Vast.ai</a> for training runs</li>
+                    <li><strong>Budget</strong>: ~$500–$2000 covers everything in this curriculum if you're careful</li>
+                </ul>
+                <h3>Stack</h3>
+                <ul>
+                    <li><a href="https://pytorch.org" target="_blank" rel="noopener"><strong>PyTorch</strong></a> (primary), <a href="https://github.com/google/jax" target="_blank" rel="noopener"><strong>JAX</strong></a> (optional, for scaling-laws module)</li>
+                    <li>Hugging Face <a href="https://github.com/huggingface/transformers" target="_blank" rel="noopener"><strong>Transformers</strong></a>, <a href="https://github.com/huggingface/datasets" target="_blank" rel="noopener"><strong>Datasets</strong></a>, <a href="https://github.com/huggingface/trl" target="_blank" rel="noopener"><strong>TRL</strong></a>, <a href="https://github.com/huggingface/accelerate" target="_blank" rel="noopener"><strong>Accelerate</strong></a></li>
+                    <li><a href="https://wandb.ai" target="_blank" rel="noopener"><strong>Weights & Biases</strong></a> for experiment tracking</li>
+                    <li><a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener"><strong>vLLM</strong></a> or <a href="https://github.com/huggingface/text-generation-inference" target="_blank" rel="noopener"><strong>TGI</strong></a> for inference</li>
+                    <li><a href="https://github.com/langchain-ai/langgraph" target="_blank" rel="noopener"><strong>LangGraph</strong></a> for agent module</li>
+                    <li><a href="https://inspect.ai-safety-institute.org.uk/" target="_blank" rel="noopener"><strong>Inspect</strong></a> or <a href="https://braintrust.dev" target="_blank" rel="noopener"><strong>Braintrust</strong></a> for evals</li>
+                </ul>
+              `
+            },
+            { id: 'l11b', title: 'Podcast / Output Production', type: 'reading', duration: '5 min', body: `
+                <h3>Format options to consider</h3>
+                <ol>
+                    <li><strong>Solo deep-dive</strong> (20–30 min) — you walk through one paper per episode</li>
+                    <li><strong>Conversation format</strong> (40–60 min) — you + 1 guest dissect a topic</li>
+                    <li><strong>Build-along</strong> (15–20 min, weekly) — short, scrappy, code-focused</li>
+                    <li><strong>Hybrid</strong> — written blog post + audio companion</li>
+                </ol>
+                <h3>Production minimum stack</h3>
+                <ul>
+                    <li><a href="https://riverside.fm" target="_blank" rel="noopener">Riverside.fm</a> or <a href="https://zencastr.com" target="_blank" rel="noopener">Zencastr</a> for recording</li>
+                    <li><a href="https://www.descript.com" target="_blank" rel="noopener">Descript</a> for editing (text-based, AI-assisted)</li>
+                    <li><a href="https://substack.com" target="_blank" rel="noopener">Substack</a> or <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a> for written companion</li>
+                    <li><a href="https://podcasters.spotify.com" target="_blank" rel="noopener">Spotify for Podcasters</a> for distribution</li>
+                </ul>
+                <h3>Suggested rhythm</h3>
+                <ul>
+                    <li>1 module per ~2 weeks</li>
+                    <li>1 podcast episode + 1 blog post + 1 demo per module</li>
+                    <li>18-week curriculum = ~18 episodes = a full season</li>
+                </ul>
+              `
+            },
+        ]},
+
+        { id: 's12', label: 'SECTION 12 / STRATEGIC', lessons: [
+            { id: 'l12a', title: 'Enterprise Tie-back', type: 'reading', duration: '5 min', body: `
+                <h3>Enterprise Tie-back</h3>
+                <p>Every module has a direct enterprise-AI-adoption application:</p>
+                <table>
+                    <thead><tr><th>Module</th><th>Enterprise application</th></tr></thead>
+                    <tbody>
+                        <tr><td>1–2 (transformers, pre-training)</td><td>Credibility when explaining model choice to enterprise CTOs</td></tr>
+                        <tr><td>3–4 (scaling laws)</td><td>TAM / cost modeling for client AI programs</td></tr>
+                        <tr><td>5 (RLHF)</td><td>Custom model fine-tuning service offering</td></tr>
+                        <tr><td>6 (reasoning)</td><td>When to recommend o-series / R1 vs cheaper models</td></tr>
+                        <tr><td>7 (agents)</td><td>Direct — this is the product surface</td></tr>
+                        <tr><td>8 (recipes)</td><td>Comparison content for enterprise procurement</td></tr>
+                        <tr><td>9 (evals)</td><td>Direct — governance and compliance hook</td></tr>
+                        <tr><td>10 (context engineering)</td><td>Direct — RAG architecture for client deployments</td></tr>
+                    </tbody>
+                </table>
+              `
+            },
+            { id: 'l12b', title: 'Open Questions & Kickoff', type: 'reading', duration: '6 min', body: `
+                <h3>Open Questions to Refine Before Kickoff</h3>
+                <ol>
+                    <li><strong>Pace</strong> — is 18 weeks realistic given your workload, or should we plan for 26–32 weeks at lower intensity?</li>
+                    <li><strong>Depth tier</strong> — three options per module: (a) read-and-discuss only, (b) read + light hands-on (notebooks), (c) full implementation from scratch.</li>
+                    <li><strong>Compute budget</strong> — what's the cap? Module 2 (GPT-2 repro) is the single biggest cost (~$200–500 in cloud GPUs).</li>
+                    <li><strong>Co-host</strong> — is the podcast solo, or are we recruiting a co-host / rotating guests?</li>
+                    <li><strong>Public vs private</strong> — is the podcast public from day one, or do we run 3–4 internal episodes first to find the format?</li>
+                    <li><strong>Cross-pollination with day job</strong> — should each module's hands-on output land back in your product or demo stack?</li>
+                    <li><strong>Math prereq</strong> — refresher module 0 on linear algebra / probability / calculus?</li>
+                </ol>
+                <h3>Next steps</h3>
+                <ul>
+                    <li>Decide on the open questions above</li>
+                    <li>Lock the first 4 modules and exact start date</li>
+                    <li>Set up tooling: GPU credits, podcast hosting, repo, eval dashboard</li>
+                    <li>Identify guest #1 (if cohost / interview format)</li>
+                    <li>Ship Module 1 podcast within 3 weeks of kickoff to force momentum</li>
+                </ul>
+              `
+            },
+        ]},
+    ];
+
+    /* ============================================================ STATE ============================================================ */
+    const STORAGE_KEY = 'frontier-ai-mastery-state';
+    const flatLessons = CURRICULUM.flatMap(s => s.lessons.map(l => ({ ...l, sectionId: s.id, sectionLabel: s.label })));
+    const totalLessons = flatLessons.length;
+
+    let state = { completed: [], notes: {}, activeId: flatLessons[0].id };
+    try { state = { ...state, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') }; } catch {}
+    const completed = new Set(state.completed);
+    const notes = state.notes || {};
+    let activeId = state.activeId || flatLessons[0].id;
+    let activeTab = 'read';
+    let activeVideoIdx = 0;
+    let activeArxiv = null;
+    let notesDirHandle = null;
+
+    function persist() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            completed: [...completed], notes, activeId
+        }));
+    }
+
+    /* ============================================================ RENDER ============================================================ */
+    const ICONS = { video: 'ph-play-circle', lab: 'ph-flask', reading: 'ph-file-text' };
+
+    function getLesson(id) { return flatLessons.find(l => l.id === id); }
+
+    function renderSidebar() {
+        const tree = document.getElementById('curriculum-tree');
+        tree.innerHTML = CURRICULUM.map(section => {
+            const isActiveSection = section.lessons.some(l => l.id === activeId);
+            const collapsed = (section.defaultOpen || isActiveSection) ? '' : 'collapsed';
+            const caret = collapsed ? 'ph-caret-right' : 'ph-caret-down';
+            const lessons = section.lessons.map(l => {
+                const active = l.id === activeId ? 'active' : '';
+                const done = completed.has(l.id);
+                const iconClass = done ? 'ph-check-circle' : (ICONS[l.type] || 'ph-file-text');
+                return `<div class="course-lesson ${active}" data-lesson="${l.id}">
+                    <i class="ph-duotone ${iconClass} lesson-icon"></i>
+                    <span>${l.title}</span>
+                    <span class="lesson-meta">${l.duration}</span>
+                </div>`;
+            }).join('');
+            return `<div class="course-module ${collapsed}" data-section="${section.id}">
+                <div class="course-module-header" data-toggle="${section.id}">
+                    <span>${section.label}</span>
+                    <i class="ph ${caret}"></i>
+                </div>${lessons}
+            </div>`;
+        }).join('');
+    }
+
+    function renderTabs(lesson) {
+        const models = lesson.module ? (MODELS[lesson.module] || []) : [];
+        const has = {
+            read: true,
+            models: models.length > 0,
+            watch: (lesson.videos || []).length > 0,
+            papers: (lesson.papers || []).length > 0,
+            lab: lesson.type === 'lab' || (lesson.code || []).length > 0,
+            notes: true,
+        };
+        document.querySelectorAll('#lesson-tabs button').forEach(btn => {
+            const t = btn.dataset.tab;
+            btn.disabled = !has[t];
+            btn.classList.toggle('active', t === activeTab);
+        });
+        if (!has[activeTab]) activeTab = 'read';
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + activeTab).classList.add('active');
+    }
+
+    function renderRead(lesson) { document.getElementById('read-body').innerHTML = lesson.body || ''; }
+
+    function renderModels(lesson) {
+        const list = document.getElementById('models-list');
+        const models = lesson.module ? (MODELS[lesson.module] || []) : [];
+        if (!models.length) { list.innerHTML = ''; return; }
+        list.innerHTML = models.map((m, i) => `
+            <div class="model-card">
+                <div class="m-num">${String(i + 1).padStart(2, '0')} / MODEL</div>
+                <div class="m-title">${m.title}</div>
+                <div class="m-body">${m.body}</div>
+            </div>
+        `).join('');
+    }
+
+    function renderWatch(lesson) {
+        const frame = document.getElementById('video-frame');
+        const list = document.getElementById('video-list');
+        const videos = lesson.videos || [];
+        if (!videos.length) {
+            frame.innerHTML = `<div class="empty-state" style="color:#fff;background:#000;height:100%;display:flex;flex-direction:column;justify-content:center;">No videos for this lesson.</div>`;
+            list.innerHTML = '';
+            return;
+        }
+        const v = videos[activeVideoIdx] || videos[0];
+        if (v.ytId) {
+            frame.innerHTML = `<iframe src="https://www.youtube.com/embed/${v.ytId}" title="${v.title}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+            const q = encodeURIComponent(v.query || v.title);
+            frame.innerHTML = `<div class="empty-state" style="color:#fff;background:#000;height:100%;display:flex;flex-direction:column;justify-content:center;">
+                <div>No YouTube ID set for "${v.title}".</div>
+                <a href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener" style="color:#fff;border-color:#fff;">Search YouTube ↗</a>
+            </div>`;
+        }
+        list.innerHTML = videos.map((vv, i) => {
+            const meta = vv.ytId ? 'YOUTUBE' : 'SEARCH';
+            return `<div class="video-item ${i === activeVideoIdx ? 'active' : ''}" data-video-idx="${i}">
+                <i class="ph-duotone ph-play-circle"></i>
+                <div class="v-title">${vv.title}</div>
+                <div class="v-meta">${meta}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function renderPapers(lesson) {
+        const list = document.getElementById('papers-list');
+        const slot = document.getElementById('paper-viewer-slot');
+        const papers = lesson.papers || [];
+        if (!papers.length) { list.innerHTML = ''; slot.innerHTML = ''; return; }
+        list.innerHTML = papers.map(p => {
+            const isActive = activeArxiv === p.arxiv && p.arxiv;
+            const meta = `${p.authors} · ${p.year}${p.arxiv ? ' · arXiv:' + p.arxiv : ''}`;
+            const actions = p.arxiv
+                ? `<button data-arxiv="${p.arxiv}">Read inline</button>
+                   <a href="https://arxiv.org/abs/${p.arxiv}" target="_blank" rel="noopener">Open ↗</a>`
+                : `<a href="https://arxiv.org/search/?query=${encodeURIComponent(p.query || p.title)}" target="_blank" rel="noopener">Search arXiv ↗</a>`;
+            return `<div class="paper-item ${isActive ? 'active' : ''}">
+                <div>
+                    <div class="p-title">${p.title}</div>
+                    <div class="p-meta">${meta}</div>
+                </div>
+                <div class="p-actions">${actions}</div>
+            </div>`;
+        }).join('');
+        if (activeArxiv) {
+            slot.innerHTML = `<iframe class="paper-viewer" src="https://arxiv.org/pdf/${activeArxiv}" title="arXiv ${activeArxiv}"></iframe>`;
+        } else {
+            slot.innerHTML = `<div class="paper-viewer-empty">Click "Read inline" on a paper above to embed it here.</div>`;
+        }
+    }
+
+    function escapeHtml(s) { return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    function renderLab(lesson) {
+        const slot = document.getElementById('lab-content');
+        const code = lesson.code || [];
+        const body = lesson.body || '';
+        const codeHtml = code.map(c =>
+            `<pre class="language-${c.lang}"><code class="language-${c.lang}">${escapeHtml(c.body)}</code></pre>`
+        ).join('');
+        slot.innerHTML = body + codeHtml;
+        if (window.Prism) Prism.highlightAllUnder(slot);
+    }
+
+    function renderNotes(lesson) {
+        const ta = document.getElementById('notes-textarea');
+        ta.value = notes[lesson.id] || '';
+        const status = document.getElementById('notes-status');
+        status.textContent = notesDirHandle ? `Folder: ${notesDirHandle.name}/` : 'No folder picked yet.';
+    }
+
+    function renderNav(lesson) {
+        const idx = flatLessons.findIndex(l => l.id === lesson.id);
+        const prev = flatLessons[idx - 1], next = flatLessons[idx + 1];
+        document.getElementById('lesson-nav').innerHTML = `
+            <button data-go="${prev ? prev.id : ''}" ${prev ? '' : 'disabled'}>← ${prev ? prev.title : 'Start'}</button>
+            <button data-go="${next ? next.id : ''}" ${next ? '' : 'disabled'}>${next ? next.title : 'End of curriculum'} →</button>
+        `;
+    }
+
+    function renderHero(lesson) {
+        document.getElementById('hero-section').textContent = lesson.sectionLabel;
+        document.getElementById('lesson-title').textContent = lesson.title;
+        const btn = document.getElementById('mark-done');
+        btn.textContent = completed.has(lesson.id) ? '✓ Completed' : 'Mark complete';
+    }
+
+    function renderProgress() {
+        const pct = Math.round((completed.size / totalLessons) * 100);
+        document.getElementById('progress-pct').textContent = pct + '%';
+        document.getElementById('progress-count').textContent = `${completed.size} of ${totalLessons}`;
+    }
+
+    function loadLesson(id) {
+        const lesson = getLesson(id);
+        if (!lesson) return;
+        activeId = id;
+        activeVideoIdx = 0;
+        activeArxiv = null;
+        renderHero(lesson);
+        renderTabs(lesson);
+        renderRead(lesson);
+        renderModels(lesson);
+        renderWatch(lesson);
+        renderPapers(lesson);
+        renderLab(lesson);
+        renderNotes(lesson);
+        renderNav(lesson);
+        renderSidebar();
+        renderProgress();
+        persist();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ============================================================ FS API NOTES ============================================================ */
+    async function pickNotesFolder() {
+        if (!window.showDirectoryPicker) {
+            document.getElementById('notes-status').textContent = 'FS API not supported — use Chrome/Edge/Brave or click "Download .md".';
+            return;
+        }
+        try {
+            notesDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', id: 'frontier-ai-notes', startIn: 'documents' });
+            document.getElementById('notes-status').textContent = `Folder: ${notesDirHandle.name}/`;
+        } catch (e) { /* user cancelled */ }
+    }
+
+    function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
+    function buildMarkdown(lesson, body) {
+        return `# ${lesson.title}\n\n_Section: ${lesson.sectionLabel}_  \n_Updated: ${new Date().toISOString()}_\n\n---\n\n${body}\n`;
+    }
+
+    async function saveNoteToFolder(lesson, body) {
+        if (!notesDirHandle) { await pickNotesFolder(); if (!notesDirHandle) return false; }
+        try {
+            const fileName = `${lesson.id}-${slugify(lesson.title)}.md`;
+            const fileHandle = await notesDirHandle.getFileHandle(fileName, { create: true });
+            const writable = await fileHandle.createWritable();
+            await writable.write(buildMarkdown(lesson, body));
+            await writable.close();
+            document.getElementById('notes-status').textContent = `Saved ${fileName} at ${new Date().toLocaleTimeString()}`;
+            return true;
+        } catch (e) {
+            document.getElementById('notes-status').textContent = `Save failed: ${e.message}`;
+            return false;
+        }
+    }
+
+    function downloadMd(lesson, body) {
+        const blob = new Blob([buildMarkdown(lesson, body)], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `${lesson.id}-${slugify(lesson.title)}.md`;
+        a.click(); URL.revokeObjectURL(url);
+    }
+
+    /* ============================================================ EVENTS ============================================================ */
+    document.addEventListener('click', (e) => {
+        const lessonEl = e.target.closest('[data-lesson]');
+        if (lessonEl) { activeTab = 'read'; loadLesson(lessonEl.dataset.lesson); return; }
+
+        const toggle = e.target.closest('[data-toggle]');
+        if (toggle) {
+            const section = document.querySelector(`[data-section="${toggle.dataset.toggle}"]`);
+            section.classList.toggle('collapsed');
+            const caret = toggle.querySelector('i');
+            caret.classList.toggle('ph-caret-down');
+            caret.classList.toggle('ph-caret-right');
+            return;
+        }
+
+        const tabBtn = e.target.closest('#lesson-tabs button');
+        if (tabBtn && !tabBtn.disabled) { activeTab = tabBtn.dataset.tab; renderTabs(getLesson(activeId)); return; }
+
+        const goBtn = e.target.closest('[data-go]');
+        if (goBtn && goBtn.dataset.go) { loadLesson(goBtn.dataset.go); return; }
+
+        const videoItem = e.target.closest('[data-video-idx]');
+        if (videoItem) { activeVideoIdx = +videoItem.dataset.videoIdx; renderWatch(getLesson(activeId)); return; }
+
+        const arxivBtn = e.target.closest('[data-arxiv]');
+        if (arxivBtn) { activeArxiv = arxivBtn.dataset.arxiv; renderPapers(getLesson(activeId)); return; }
+
+        if (e.target.id === 'mark-done') {
+            if (completed.has(activeId)) completed.delete(activeId); else completed.add(activeId);
+            renderHero(getLesson(activeId)); renderSidebar(); renderProgress(); persist(); return;
+        }
+        if (e.target.id === 'pick-folder') { pickNotesFolder(); return; }
+        if (e.target.id === 'save-md') {
+            const lesson = getLesson(activeId);
+            const body = document.getElementById('notes-textarea').value;
+            saveNoteToFolder(lesson, body); return;
+        }
+        if (e.target.id === 'download-md') {
+            const lesson = getLesson(activeId);
+            const body = document.getElementById('notes-textarea').value;
+            downloadMd(lesson, body); return;
+        }
+    });
+
+    document.getElementById('notes-textarea').addEventListener('input', (e) => {
+        notes[activeId] = e.target.value;
+        persist();
+    });
+
+    /* ============================================================ BOOT ============================================================ */
+    loadLesson(activeId);
+    </script>
+</body>
+</html>
